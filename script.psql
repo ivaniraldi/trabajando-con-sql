@@ -1,0 +1,84 @@
+--PARA CORRER ESTE ARCHIVO DIRECTAMENTE EN LA TERMINAL DE PSQL PODEMOS USAR:
+-- psql -U postgres -d prueba1 -W -f script.psql
+--DEBEMOS ESTAR PARADOS CON LA TERMINAL EN LA RUTA DONDE SE ENCUENTRA EL SCRIPT
+
+--Paso 1: Ingresa al cliente de PostgreSQL vía el terminal.
+-- psql -U postgres
+
+--EN CASO DE ERROR DE CONSOLA,(CODIGO DE PAGINA)ERROR 8 BITS, EJECUTAR EL SIGUIENTE COMANDO:
+-- chcp 1252
+
+--Paso 2: Crea una base de datos llamada prueba1.
+-- CREATE DATABASE prueba1;
+
+--Paso 3: Lista las bases de datos creadas.
+-- \l
+
+-- Paso 4: Conéctate a la base de datos.
+-- \c prueba1
+
+-- Paso 5: Crea la tabla estudiantes con las columnas nombres y notas de tipo varchar(50).
+CREATE TABLE estudiantes (
+    nombres VARCHAR(50),
+    notas VARCHAR(50)
+);
+
+-- Paso 6: Verifica que la tabla se haya creado utilizando el comando para listar las tablas.
+-- \dt
+
+-- Paso 7: Agrega la columna apellido de tipo varchar(50) a la tabla estudiantes.
+ALTER TABLE estudiantes ADD COLUMN apellido VARCHAR(50);
+
+-- Paso 8: Describe la tabla generada.
+-- \d estudiantes
+
+-- Paso 9: Elimina la columna apellido.
+ALTER TABLE estudiantes DROP COLUMN apellido;
+
+-- Paso 10: Ingresa 5 estudiantes especificando el nombre y la nota.
+INSERT INTO estudiantes (nombres, notas) VALUES
+('Juan', '7'),
+('Ana', '8'),
+('Pedro', '6'),
+('Maria', '9'),
+('Carlos', '5');
+
+-- Paso 11: Ingresa 2 estudiantes sin nota.
+INSERT INTO estudiantes (nombres) VALUES
+('Luis'),
+('Lucia');
+
+-- Paso 12: Borra todos los estudiantes sin nota.
+DELETE FROM estudiantes WHERE notas IS NULL;
+
+-- Paso 13: Actualiza las notas del estudiante con la nota más baja y cambia el valor por 10.
+UPDATE estudiantes
+SET notas = '10'
+WHERE notas = (SELECT MIN(notas) FROM estudiantes);
+
+-- Paso 14: Ingresa un estudiante con un nombre muy largo (mayor a 50 caracteres).
+-- INSERT INTO estudiantes (nombres, notas) VALUES
+-- ('Este nombre es mucho más largo de lo permitido para la columna nombres en la tabla estudiantes', '8');
+
+-- Paso 15: Selecciona todos los datos.
+SELECT * FROM estudiantes;
+
+--Paso 16: Selecciona el primer y segundo nombre de la tabla utilizando la cláusula WHERE y el nombre en específico.
+SELECT * FROM estudiantes
+WHERE nombres = 'Juan' OR nombres = 'Ana';
+
+--Paso 17: Selecciona los nombres y ordénalos alfabéticamente.
+SELECT nombres FROM estudiantes ORDER BY nombres ASC;
+
+--Paso 18: Crea una consulta que devuelva a los 3 estudiantes con la nota más alta.
+SELECT * FROM estudiantes
+ORDER BY notas DESC
+LIMIT 3;
+
+--Paso 19: Selecciona todas las notas entre 3 y 8.
+SELECT * FROM estudiantes
+WHERE notas::numeric > 3 AND notas::numeric < 8;
+
+--Paso 20: Sal de PostgreSQL.
+-- \q
+
